@@ -1,0 +1,20 @@
+services:
+  localstack:
+    image: localstack/localstack:latest
+    container_name: localstack
+    volumes:
+      - ./localstack:/localstack
+    ports:
+    - "4566:4566"
+  backend:
+    image: node:18
+    container_name: server
+    depends_on:
+      - localstack
+    volumes:
+      - ./server:/server
+      - /server/node_modules 
+    command: sh -c "cd /server && npm install && npm run dev"
+    ports:
+      - "3000:3000"
+
